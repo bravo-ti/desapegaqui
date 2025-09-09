@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Item - DesapegaQui</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+    <div id="menu-placeholder"></div>
+
+    <div class="main-content">
+        <button id="toggle-menu-btn" title="Recolher menu">«</button>
+
+        <main>
+            <div class="container">
+                <div id="item-detalhe-container" class="item-detalhe-grid">
+                    </div>
+
+                <div class="lances-section">
+                    <h2>Histórico de Lances</h2>
+                    <div id="lances-historico-container">
+                        <p>Nenhum lance foi dado ainda.</p>
+                    </div>
+
+                    <div class="dar-lance-form">
+                        <h3>Faça seu lance</h3>
+                        <form id="form-lance">
+                            <div class="form-group">
+                                <label for="valor-lance">Seu lance (R$)</label>
+                                <input type="number" id="valor-lance" name="valorLance" required min="0" step="0.01" placeholder="Ex: 160.00">
+                            </div>
+                            <button type="submit" class="btn-primary">Confirmar Lance</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="main-footer">
+            <div class="container">
+                <p>&copy; 2025 DesapegaQui. Todos os direitos reservados.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/detalhes-item.js"></script>
+</body>
+</html>
