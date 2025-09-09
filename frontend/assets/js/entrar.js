@@ -26,5 +26,5 @@ loginForm.addEventListener('submit', function(event) {
 
   // 5. Redireciona o usuário para a página principal (home.html)
   // Isso só acontece DEPOIS que os dados foram salvos.
-  window.location.href = 'home.html';
+  window.location.href = 'perfil.html';
 });
