@@ -62,6 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 4. Avisar o usuário e redirecionar
         alert('Anúncio cadastrado com sucesso!');
-        window.location.href = 'index.html'; // Redireciona para a página inicial
+        window.location.href = 'itens-disponiveis.html'; // Redireciona para a página inicial
     }
 });
