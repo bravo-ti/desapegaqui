@@ -1,30 +1,35 @@
-// Seleciona o formulário de login pelo ID que adicionamos
-const loginForm = document.getElementById('login-form');
+// Adicionado para seguir a mesma boa prática do main.js
+document.addEventListener('DOMContentLoaded', () => {
 
-// Adiciona um "ouvinte" para o evento de 'submit' (envio) do formulário
-loginForm.addEventListener('submit', function(event) {
-  
-  // 1. Previne o comportamento padrão do formulário, que é recarregar a página
-  event.preventDefault();
+    const loginForm = document.getElementById('login-form');
 
-  // 2. Pega os valores dos campos de e-mail e senha
-  const emailInput = document.getElementById('email');
-  const email = emailInput.value;
+    // Se o formulário de login não existir nesta página, não faz nada.
+    if (!loginForm) {
+        return;
+    }
 
-  // 3. Cria um objeto para representar o usuário logado
-  // (Em um app real, você primeiro validaria a senha com um servidor)
-  const user = {
-    email: email,
-    // Você pode adicionar mais informações que venham do seu banco de dados
-    name: 'Usuário Exemplo' 
-  };
+    loginForm.addEventListener('submit', function(event) {
+        // 1. Previne o comportamento padrão do formulário
+        event.preventDefault();
 
-  // 4. Salva o objeto do usuário no localStorage
-  // IMPORTANTE: localStorage só armazena texto (strings).
-  // Por isso, convertemos o objeto 'user' para uma string no formato JSON.
-  localStorage.setItem('loggedInUser', JSON.stringify(user));
+        // 2. Pega o valor do campo de e-mail
+        const emailInput = document.getElementById('email');
+        const email = emailInput.value;
 
-  // 5. Redireciona o usuário para a página principal (home.html)
-  // Isso só acontece DEPOIS que os dados foram salvos.
-  window.location.href = 'perfil.html';
+        // 3. Cria um objeto para representar o usuário logado
+        const user = {
+            email: email,
+            // CORRIGIDO: A propriedade agora é 'nome' para ser compatível com main.js
+            nome: 'Usuário Exemplo' 
+        };
+
+        // 4. Salva o objeto do usuário no localStorage
+        // CORRIGIDO: A chave agora é 'currentUser' para ser compatível com main.js
+        localStorage.setItem('currentUser', JSON.stringify(user));
+
+        // 5. Redireciona o usuário para a página de perfil
+        alert('Login realizado com sucesso!');
+        window.location.href = 'perfil.html';
+    });
+
 });

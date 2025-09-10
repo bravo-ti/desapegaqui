@@ -1,66 +1,161 @@
-// Recupera os itens do LocalStorage
-let itens = JSON.parse(localStorage.getItem('itens')) || [];
+document.addEventListener('DOMContentLoaded', () => {
+    // --- ELEMENTOS DO DOM ---
+    const listaItensContainer = document.getElementById('meus-itens-lista');
+    const inputBusca = document.getElementById('busca-nome');
+    const selectCategoria = document.getElementById('filtro-categoria');
+    const modal = document.getElementById('lances-modal');
+    const modalTitulo = document.getElementById('modal-titulo');
+    const modalBody = document.getElementById('lances-modal-body');
+    const btnFecharModal = document.getElementById('modal-fechar-btn');
 
-const listaItens = document.getElementById('lista-itens');
-const filtroInput = document.getElementById('filtro');
+    // --- CARREGAR DADOS ---
+    const todosAnuncios = JSON.parse(localStorage.getItem('anuncios')) || [];
+    const todosLances = JSON.parse(localStorage.getItem('lances')) || [];
+    
+    // --- FUNÇÕES AUXILIARES ---
+    
+    // Função para calcular o valor efetivo de um lance (para ordenação)
+    function getValorEfetivo(lance) {
+        if (!lance) return -Infinity;
+        switch (lance.tipo) {
+            case 'pagar': return parseFloat(lance.valor);
+            case 'gratis': return 0;
+            case 'cobrar': return -parseFloat(lance.valor);
+            default: return -Infinity;
+        }
+    }
+    
+    // --- FUNÇÕES PRINCIPAIS ---
 
-// Função para exibir os itens na tela
-function exibirItens(itensParaExibir) {
-  listaItens.innerHTML = ''; // Limpa a lista
+    /**
+     * Renderiza a lista de itens na tela com base em um array filtrado.
+     * @param {Array} anunciosParaRenderizar O array de anúncios a ser exibido.
+     */
+    function renderizarItens(anunciosParaRenderizar) {
+        listaItensContainer.innerHTML = ''; // Limpa a lista atual
 
-  itensParaExibir.forEach((item, index) => {
-    const card = document.createElement('div');
-    card.classList.add('col-md-4');
+        if (anunciosParaRenderizar.length === 0) {
+            listaItensContainer.innerHTML = `<p class="empty-message">Nenhum item encontrado com os filtros selecionados.</p>`;
+            return;
+        }
 
-    card.innerHTML = `
-      <div class="card h-100">
-        ${item.foto ? `<img src="${item.foto}" class="card-img-top" alt="${item.nome}">` : ''}
-        <div class="card-body">
-          <h5 class="card-title">${item.nome}</h5>
-          <p class="card-text">${item.descricao}</p>
-          <p><strong>Categoria:</strong> ${item.categoria}</p>
-          <p><strong>Preço:</strong> R$ ${item.preco}</p>
-          <p><strong>Quantidade:</strong> ${item.quantidade}</p>
-          <p><strong>Localização:</strong> ${item.localizacao}</p>
-          <p><strong>Disponível por:</strong> ${item.tempo} dias</p>
-        </div>
-      </div>
-    `;
+        anunciosParaRenderizar.forEach(item => {
+            const lancesDoItem = todosLances.filter(lance => lance.itemId === item.id);
+            lancesDoItem.sort((a, b) => getValorEfetivo(b) - getValorEfetivo(a));
+            const melhorLance = lancesDoItem[0];
+            
+            let melhorLanceTexto = 'Nenhuma oferta';
+            if(melhorLance){
+                 const valorFormatado = parseFloat(melhorLance.valor).toFixed(2).replace('.',',');
+                 switch(melhorLance.tipo){
+                     case 'pagar': melhorLanceTexto = `R$ ${valorFormatado}`; break;
+                     case 'gratis': melhorLanceTexto = 'Retirada grátis'; break;
+                     case 'cobrar': melhorLanceTexto = `Cobrando R$ ${valorFormatado}`; break;
+                 }
+            }
 
-    listaItens.appendChild(card);
-  });
+            const itemCard = document.createElement('div');
+            itemCard.className = 'item-card';
+            itemCard.innerHTML = `
+                <img src="${item.imagemBase64 || 'https://via.placeholder.com/300x200'}" alt="${item.titulo}" class="item-card-imagem">
+                <div class="item-card-conteudo">
+                    <h3>${item.titulo}</h3>
+                    <div class="item-card-info">
+                        <span><strong>Categoria:</strong> ${item.categoria}</span>
+                        <span><strong>Valor Inicial:</strong> R$ ${parseFloat(item.valor).toFixed(2).replace('.',',')}</span>
+                        <span><strong>Melhor Oferta:</strong> ${melhorLanceTexto}</span>
+                    </div>
+                    <div class="item-card-botoes">
+                        <a href="editar-item.html?id=${item.id}" class="btn btn-editar">Editar</a>
+                        <button class="btn btn-ver-lances" data-item-id="${item.id}">Ver Lances (${lancesDoItem.length})</button>
+                    </div>
+                </div>
+            `;
+            listaItensContainer.appendChild(itemCard);
+        });
+    }
 
-  if(itensParaExibir.length === 0){
-    listaItens.innerHTML = `<p class="text-center">Nenhum item cadastrado.</p>`;
-  }
-}
+    /**
+     * Filtra os anúncios com base nos inputs de busca e categoria e os renderiza.
+     */
+    function aplicarFiltros() {
+        const termoBusca = inputBusca.value.toLowerCase();
+        const categoriaSelecionada = selectCategoria.value;
 
-// Exibir todos os itens inicialmente
-exibirItens(itens);
+        const itensFiltrados = todosAnuncios.filter(item => {
+            const correspondeNome = item.titulo.toLowerCase().includes(termoBusca);
+            const correspondeCategoria = !categoriaSelecionada || item.categoria === categoriaSelecionada;
+            return correspondeNome && correspondeCategoria;
+        });
 
-// Filtro por nome ou categoria
-filtroInput.addEventListener('input', () => {
-  const termo = filtroInput.value.toLowerCase();
-  const itensFiltrados = itens.filter(item => 
-    item.nome.toLowerCase().includes(termo) ||
-    item.categoria.toLowerCase().includes(termo)
-  );
-  exibirItens(itensFiltrados);
-});
+        renderizarItens(itensFiltrados);
+    }
 
-// Recupera o input do filtro
-const filtroInput = document.getElementById('filtro');
+    /**
+     * Abre o modal e exibe os lances para um item específico.
+     * @param {string} itemId O ID do item cujos lances serão exibidos.
+     */
+    function abrirModalLances(itemId) {
+        const item = todosAnuncios.find(anuncio => anuncio.id === itemId);
+        if (!item) return;
 
-// Função que filtra e exibe os itens
-filtroInput.addEventListener('input', () => {
-  const termo = filtroInput.value.toLowerCase(); // converte para minúscula
+        modalTitulo.textContent = `Lances para "${item.titulo}"`;
+        
+        const lancesDoItem = todosLances
+            .filter(lance => lance.itemId === itemId)
+            .sort((a, b) => getValorEfetivo(b) - getValorEfetivo(a));
+        
+        if (lancesDoItem.length === 0) {
+            modalBody.innerHTML = '<p>Este item ainda não recebeu nenhuma oferta.</p>';
+        } else {
+            let lancesHTML = '<ul id="lances-lista">';
+            lancesDoItem.forEach(lance => {
+                const valorFormatado = parseFloat(lance.valor).toFixed(2).replace('.',',');
+                let textoLance = '';
+                switch(lance.tipo){
+                     case 'pagar': textoLance = `Ofereceu pagar <strong>R$ ${valorFormatado}</strong>`; break;
+                     case 'gratis': textoLance = 'Ofereceu retirar <strong>gratuitamente</strong>'; break;
+                     case 'cobrar': textoLance = `Cobrou uma taxa de <strong>R$ ${valorFormatado}</strong> para retirar`; break;
+                }
+                lancesHTML += `<li>${textoLance} <br><small>(${new Date(lance.data).toLocaleString('pt-BR')})</small></li>`;
+            });
+            lancesHTML += '</ul>';
+            modalBody.innerHTML = lancesHTML;
+        }
 
-  // Filtra os itens do LocalStorage
-  const itensFiltrados = itens.filter(item => 
-    item.nome.toLowerCase().includes(termo) || // filtra pelo nome
-    item.categoria.toLowerCase().includes(termo) // filtra pela categoria
-  );
+        modal.style.display = 'flex';
+    }
 
-  // Chama a função para exibir os itens filtrados
-  exibirItens(itensFiltrados);
+    function fecharModal() {
+        modal.style.display = 'none';
+    }
+
+    // --- EVENT LISTENERS ---
+
+    // Listeners para os filtros
+    inputBusca.addEventListener('input', aplicarFiltros);
+    selectCategoria.addEventListener('change', aplicarFiltros);
+
+    // Listener para fechar o modal
+    btnFecharModal.addEventListener('click', fecharModal);
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) { // Fecha se clicar fora do conteúdo
+            fecharModal();
+        }
+    });
+
+    // Listener para os botões "Ver Lances" (usando delegação de eventos)
+    listaItensContainer.addEventListener('click', (event) => {
+        if (event.target.classList.contains('btn-ver-lances')) {
+            const itemId = event.target.dataset.itemId;
+            abrirModalLances(itemId);
+        }
+    });
+
+    // --- INICIALIZAÇÃO ---
+    if (todosAnuncios.length === 0) {
+        listaItensContainer.innerHTML = '<p class="empty-message">Você ainda não cadastrou nenhum item. <a href="cadastrar-item.html">Clique aqui para começar!</a></p>';
+    } else {
+        aplicarFiltros(); // Renderiza todos os itens inicialmente
+    }
 });

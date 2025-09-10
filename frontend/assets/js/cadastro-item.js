@@ -1,85 +1,67 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('form-item');
-  const mensagem = document.getElementById('mensagem-sucesso');
-  const botoes = document.getElementById('botoes-opcao');
-  const btnEnviar = document.getElementById('btn-enviar');
-  const btnResetar = document.getElementById('btn-resetar');
-  const btnVerItens = document.getElementById('btn-ver-itens');
+    // Seleciona o formulário pelo ID para ser mais específico
+    const itemForm = document.getElementById('item-form');
+    
+    // Se o formulário não existir na página, interrompe o script
+    if (!itemForm) {
+        return;
+    }
 
-  function desabilitarCampos() {
-    const campos = form.querySelectorAll('input, textarea, select');
-    campos.forEach(campo => campo.disabled = true);
-    btnEnviar.disabled = true;
-  }
+    itemForm.addEventListener('submit', (event) => {
+        // Previne o comportamento padrão do formulário (que seria recarregar a página)
+        event.preventDefault();
 
-  function resetarFormulario() {
-    form.reset();
-    const campos = form.querySelectorAll('input, textarea, select');
-    campos.forEach(campo => campo.disabled = false);
-    btnEnviar.disabled = false;
-    mensagem.style.display = 'none';
-    botoes.style.display = 'none';
-  }
+        // 1. Coletar os dados do formulário
+        const formData = new FormData(itemForm);
 
-  function verMeusItens() {
-    window.location.href = 'meus-itens.html';
-  }
+        const novoAnuncio = {
+            id: 'anuncio-' + Date.now(), // Cria um ID único baseado no tempo
+            titulo: formData.get('itemTitulo'),
+            detalhes: formData.get('itemDetalhes'),
+            valor: parseFloat(formData.get('itemValor')).toFixed(2),
+            categoria: formData.get('itemCategoria'),
+            expiracaoDias: parseInt(formData.get('itemExpiracao')),
+            dataCadastro: new Date().toISOString()
+        };
 
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
+        // 2. Processar a imagem
+        const fotoInput = document.getElementById('item-foto');
+        const fotoFile = fotoInput.files[0];
 
-    // Aqui você pode adicionar lógica de envio real (ex: salvar em banco de dados)
+        if (fotoFile) {
+            const reader = new FileReader();
 
-    desabilitarCampos();
-    mensagem.style.display = 'block';
-    botoes.style.display = 'flex';
-  });
+            // Quando a leitura do arquivo terminar
+            reader.onloadend = () => {
+                // A imagem é convertida para Base64, um formato de texto
+                // que pode ser salvo no localStorage.
+                novoAnuncio.imagemBase64 = reader.result;
+                
+                // 3. Salvar o anúncio no localStorage
+                salvarAnuncio(novoAnuncio);
+            };
 
-  btnResetar.addEventListener('click', resetarFormulario);
-  btnVerItens.addEventListener('click', verMeusItens);
+            // Inicia a leitura do arquivo de imagem
+            reader.readAsDataURL(fotoFile);
+        } else {
+            // Caso não haja foto (embora o campo seja 'required', é uma boa prática ter um fallback)
+            salvarAnuncio(novoAnuncio);
+        }
+    });
+
+    function salvarAnuncio(anuncio) {
+        // Busca os anúncios já existentes no localStorage. Se não houver, começa com um array vazio.
+        const anunciosExistentes = JSON.parse(localStorage.getItem('anuncios')) || [];
+
+        // Adiciona o novo anúncio à lista
+        anunciosExistentes.push(anuncio);
+
+        // Salva a lista atualizada de volta no localStorage
+        // JSON.stringify converte o array de objetos em uma string, que é como o localStorage armazena dados.
+        localStorage.setItem('anuncios', JSON.stringify(anunciosExistentes));
+
+        // 4. Avisar o usuário e redirecionar
+        alert('Anúncio cadastrado com sucesso!');
+        window.location.href = 'index.html'; // Redireciona para a página inicial
+    }
 });
-
-const form = document.getElementById('form-item');
-
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-
-  // Criar objeto com os dados do formulário
-  const item = {
-    nome: document.getElementById('nome').value,
-    descricao: document.getElementById('descricao').value,
-    categoria: document.getElementById('categoria').value,
-    preco: document.getElementById('preco').value,
-    quantidade: document.getElementById('quantidade').value,
-    localizacao: document.getElementById('localizacao').value,
-    tempo: document.getElementById('tempo').value,
-    foto: null
-  };
-
-  // Ler a foto como Base64
-  const file = document.getElementById('foto').files[0];
-  if(file){
-    const reader = new FileReader();
-    reader.onload = () => {
-      item.foto = reader.result;
-
-      salvarItem(item);
-    };
-    reader.readAsDataURL(file); // converte em Base64
-  } else {
-    salvarItem(item);
-  }
-});
-
-function salvarItem(item){
-  // Recupera lista existente ou cria uma nova
-  const itens = JSON.parse(localStorage.getItem('itens')) || [];
-  itens.push(item);
-
-  localStorage.setItem('itens', JSON.stringify(itens));
-
-  // Mensagem de sucesso
-  document.getElementById('mensagem-sucesso').style.display = 'block';
-  document.getElementById('botoes-opcao').style.display = 'flex';
-  document.getElementById('form-item').reset();
-}

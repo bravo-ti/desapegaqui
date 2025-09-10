@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     // --- 1. VERIFICAÇÃO DE LOGIN ---
     // Pega o usuário logado do localStorage
-    const userJSON = localStorage.getItem('loggedInUser');
+    const userJSON = localStorage.getItem('currentUser');
 
     // Se não houver usuário, redireciona para a página de login
     if (!userJSON) {

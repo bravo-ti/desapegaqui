@@ -1,0 +1,163 @@
+/* --- Filtros --- */
+.filtros-container {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.filtros-container input[type="search"],
+.filtros-container select {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    flex: 1;
+    min-width: 200px;
+}
+
+/* --- Grade de Itens --- */
+.itens-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.item-card {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.item-card-imagem {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.item-card-conteudo {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.item-card-conteudo h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.25rem;
+}
+
+.item-card-info {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.item-card-info span {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.item-card-botoes {
+    margin-top: auto;
+    display: flex;
+    gap: 10px;
+}
+
+.item-card-botoes .btn {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-editar {
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+}
+.btn-editar:hover { background-color: #0056b3; }
+
+.btn-ver-lances {
+    background-color: #28a745;
+    color: white;
+}
+.btn-ver-lances:hover { background-color: #1e7e34; }
+
+
+/* --- Estilos do Modal de Lances --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: none; /* Oculto por padrão */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #888;
+}
+
+#lances-lista {
+    list-style: none;
+    padding: 0;
+}
+#lances-lista li {
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+#lances-lista li:last-child {
+    border-bottom: none;
+}
+
+/* Mensagens de Carregamento/Vazio */
+.loading-message, .empty-message {
+    grid-column: 1 / -1; /* Ocupa todas as colunas da grade */
+    text-align: center;
+    font-size: 1.2rem;
+    color: #777;
+    padding: 50px;
+}
