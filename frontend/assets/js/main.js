@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const menuPlaceholder = document.getElementById('menu-placeholder');
         if (!menuPlaceholder) return;
 
-        fetch('menu.html') // <-- A MUDANÇA ESTÁ AQUI
+        fetch('menu.html') 
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Erro ao carregar o menu');
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Função que verifica o login e ajusta o menu
     const updateMenuState = () => {
-        // Pega o usuário do localStorage usando a chave CORRETA: 'currentUser'
+       
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
         // Elementos do menu para visitantes

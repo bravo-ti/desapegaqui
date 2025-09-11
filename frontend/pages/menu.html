@@ -1,6 +1,7 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm fixed-top">
     <div class="container">
         <a class="navbar-brand" href="index.html">
+            <!--<img src="../assets/images/logo.png" alt="DesapegaQui Logo" style="height: 30px; margin-right: 10px;">-->
             DesapegaQui
         </a>
 
@@ -10,24 +11,34 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                
                 <li class="nav-item">
-                    <a class="nav-link" href="itens-disponiveis.html">Itens Disponíveis</a>
+                    <a class="nav-link" href="meus-itens.html">Meus Anúncios</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="cadastrar-item.html">Cadastrar Item</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="meus-itens.html">Meus Itens</a>
-                </li>
-                <li class="nav-item">
-                   
+                    <a class="nav-link" href="cadastrar-item.html">Anunciar Item</a>
                 </li>
             </ul>
             
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item" id="user-session-placeholder">
-                    </li>
+                
+                <li class="nav-item" id="register-link">
+                    <a class="nav-link" href="cadastro.html">Cadastrar-se</a>
+                </li>
+                <li class="nav-item" id="login-link">
+                    <a class="nav-link btn btn-primary text-white px-3" href="entrar.html">Entrar</a>
+                </li>
+
+                <li class="nav-item dropdown" id="user-greeting" style="display: none;">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Olá, <strong id="username-display"></strong>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="perfil.html">Meu Perfil</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="logout-link">Sair</a></li>
+                    </ul>
+                </li>
+
             </ul>
         </div>
     </div>
