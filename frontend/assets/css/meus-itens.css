@@ -161,3 +161,40 @@
     color: #777;
     padding: 50px;
 }
+/* Adicione ou atualize estes estilos no seu meus-itens.css */
+
+#lances-lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#lances-lista li {
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex; /* Habilita o Flexbox */
+    justify-content: space-between; /* Espaça os itens */
+    align-items: center; /* Alinha verticalmente */
+    gap: 15px;
+}
+
+#lances-lista li:last-child {
+    border-bottom: none;
+}
+
+.btn-cancelar-lance {
+    background-color: #dc3545; /* Vermelho 'danger' do Bootstrap */
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    flex-shrink: 0; /* Impede que o botão encolha */
+}
+
+.btn-cancelar-lance:hover {
+    background-color: #c82333; /* Vermelho mais escuro */
+}

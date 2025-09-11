@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meus Itens - DesapegaQui</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/meus-itens.css">
-    
+    <link rel="stylesheet" href="../assets/css/style.css"> <link rel="stylesheet" href="../assets/css/meus-itens.css"> <style>
+        /* Garante que o conteúdo não fique escondido atrás do menu fixo */
+        body { 
+            padding-top: 80px; 
+            padding-bottom: 80px; /* Espaço para o rodapé */
+        }
+    </style>
 </head>
 <body>
-    <div id="menu-placeholder"></div>
+    <header id="menu-placeholder"></header>
 
     <div class="main-content">
         <main>
@@ -52,8 +57,14 @@
         </div>
     </div>
 
+    <footer class="main-footer fixed-bottom bg-light py-3">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2025 DesapegaQui. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/main.js"></script>
     <script src="../assets/js/meus-itens.js"></script> 
-     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

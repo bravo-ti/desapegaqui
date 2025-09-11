@@ -1,9 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    // Função principal para carregar o menu e depois atualizar seu estado
-    // Em assets/js/main.js
-
-    // Função principal para carregar o menu e depois atualizar seu estado
     const loadMenu = () => {
         const menuPlaceholder = document.getElementById('menu-placeholder');
         if (!menuPlaceholder) return;

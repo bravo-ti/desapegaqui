@@ -9,9 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnFecharModal = document.getElementById('modal-fechar-btn');
 
     // --- CARREGAR DADOS ---
-    const todosAnuncios = JSON.parse(localStorage.getItem('anuncios')) || [];
-    const todosLances = JSON.parse(localStorage.getItem('lances')) || [];
+    // Usamos 'let' para que possamos modificar o array de lances ao cancelar uma oferta
+    let todosAnuncios = JSON.parse(localStorage.getItem('anuncios')) || [];
+    let todosLances = JSON.parse(localStorage.getItem('lances')) || [];
     
+    // Variável para guardar o ID do item que está com o modal aberto
+    let currentItemId = null;
+
     // --- FUNÇÕES AUXILIARES ---
     
     // Função para calcular o valor efetivo de um lance (para ordenação)
@@ -96,6 +100,9 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {string} itemId O ID do item cujos lances serão exibidos.
      */
     function abrirModalLances(itemId) {
+        // Guarda o ID do item atual para ser usado por outras funções
+        currentItemId = itemId;
+
         const item = todosAnuncios.find(anuncio => anuncio.id === itemId);
         if (!item) return;
 
@@ -117,7 +124,16 @@ document.addEventListener('DOMContentLoaded', () => {
                      case 'gratis': textoLance = 'Ofereceu retirar <strong>gratuitamente</strong>'; break;
                      case 'cobrar': textoLance = `Cobrou uma taxa de <strong>R$ ${valorFormatado}</strong> para retirar`; break;
                 }
-                lancesHTML += `<li>${textoLance} <br><small>(${new Date(lance.data).toLocaleString('pt-BR')})</small></li>`;
+
+                // Adicionamos um <div> e o botão de cancelar com o ID do lance
+                lancesHTML += `
+                    <li>
+                        <div>
+                            ${textoLance}
+                            <br><small>(${new Date(lance.data).toLocaleString('pt-BR')})</small>
+                        </div>
+                        <button class="btn-cancelar-lance" data-lance-id="${lance.id}" title="Cancelar esta oferta">Cancelar</button>
+                    </li>`;
             });
             lancesHTML += '</ul>';
             modalBody.innerHTML = lancesHTML;
@@ -126,8 +142,33 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.style.display = 'flex';
     }
 
+    /**
+     * Fecha o modal de lances.
+     */
     function fecharModal() {
         modal.style.display = 'none';
+        currentItemId = null; // Limpa o ID do item atual ao fechar
+    }
+
+    /**
+     * Cancela (remove) um lance específico.
+     * @param {string} lanceId O ID do lance a ser cancelado.
+     */
+    function cancelarLance(lanceId) {
+        if (!confirm('Tem certeza de que deseja cancelar esta oferta? Esta ação não pode ser desfeita.')) {
+            return;
+        }
+
+        // Remove o lance do array 'todosLances'
+        todosLances = todosLances.filter(lance => lance.id !== lanceId);
+        
+        // Atualiza o localStorage com o novo array de lances
+        localStorage.setItem('lances', JSON.stringify(todosLances));
+
+        // Atualiza a tela para refletir a remoção
+        alert('Oferta cancelada com sucesso!');
+        aplicarFiltros(); // Re-renderiza a lista de itens principal (atualiza contagem e melhor oferta)
+        abrirModalLances(currentItemId); // Re-renderiza o modal com a lista de lances atualizada
     }
 
     // --- EVENT LISTENERS ---
@@ -152,9 +193,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Listener para os botões "Cancelar" dentro do modal (usando delegação de eventos)
+    modalBody.addEventListener('click', (event) => {
+        if (event.target.classList.contains('btn-cancelar-lance')) {
+            const lanceId = event.target.dataset.lanceId;
+            cancelarLance(lanceId);
+        }
+    });
+
     // --- INICIALIZAÇÃO ---
     if (todosAnuncios.length === 0) {
-        listaItensContainer.innerHTML = '<p class="empty-message">Você ainda não cadastrou nenhum item. <a href="cadastrar-item.html">Clique aqui para começar!</a></p>';
+        listaItensContainer.innerHTML = '<p class="empty-message">Você ainda não cadastrou nenhum item. <a href="cadastrar-novo-item.html">Clique aqui para começar!</a></p>';
     } else {
         aplicarFiltros(); // Renderiza todos os itens inicialmente
     }
