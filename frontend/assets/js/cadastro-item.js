@@ -65,3 +65,31 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = 'itens-disponiveis.html'; // Redireciona para a página inicial
     }
 });
+
+/**
+ * Exclui um anúncio do localStorage com base no seu ID.
+ * @param {string} idDoAnuncio - O ID do anúncio a ser excluído.
+ */
+function excluirAnuncio(idDoAnuncio) {
+    // Pede uma confirmação ao usuário antes de prosseguir.
+    const confirmar = confirm('Tem certeza de que deseja excluir este anúncio? Esta ação não pode ser desfeita.');
+
+    // Se o usuário não confirmar, a função para aqui.
+    if (!confirmar) {
+        return;
+    }
+
+    // Busca os anúncios existentes no localStorage.
+    const anunciosExistentes = JSON.parse(localStorage.getItem('anuncios')) || [];
+
+    // Cria uma nova lista contendo apenas os anúncios cujo ID é DIFERENTE daquele que queremos excluir.
+    // O método 'filter' é perfeito para isso.
+    const anunciosAtualizados = anunciosExistentes.filter(anuncio => anuncio.id !== idDoAnuncio);
+
+    // Salva a nova lista (sem o item excluído) de volta no localStorage.
+    localStorage.setItem('anuncios', JSON.stringify(anunciosAtualizados));
+
+    // Avisa o usuário e recarrega a página para que a lista seja atualizada visualmente.
+    alert('Anúncio excluído com sucesso!');
+    window.location.reload(); // Recarrega a página para refletir a exclusão.
+}

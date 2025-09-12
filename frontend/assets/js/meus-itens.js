@@ -2,11 +2,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- ELEMENTOS DO DOM ---
     const listaItensContainer = document.getElementById('meus-itens-lista');
     const inputBusca = document.getElementById('busca-nome');
-    const selectCategoria = document.getElementById('filtro-categoria');
-    const modal = document.getElementById('lances-modal');
+    const selectCategoria = document.getElementById('filtro-categoria');    
     const modalTitulo = document.getElementById('modal-titulo');
     const modalBody = document.getElementById('lances-modal-body');
     const btnFecharModal = document.getElementById('modal-fechar-btn');
+    const inputBairro = document.getElementById('filtro-bairro');
+    const inputCidade = document.getElementById('filtro-cidade');
+    const selectEstado = document.getElementById('filtro-estado');
+    const modal = document.getElementById('lances-modal');
 
     // --- CARREGAR DADOS ---
     // Usamos 'let' para que possamos modificar o array de lances ao cancelar uma oferta
@@ -70,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span><strong>Melhor Oferta:</strong> ${melhorLanceTexto}</span>
                     </div>
                     <div class="item-card-botoes">
-                        <a href="editar-item.html?id=${item.id}" class="btn btn-editar">Editar</a>
+                        <button class="btn btn-excluir" data-id="${item.id}">Excluir Anúncio</button>
                         <button class="btn btn-ver-lances" data-item-id="${item.id}">Ver Lances (${lancesDoItem.length})</button>
                     </div>
                 </div>
@@ -80,16 +83,34 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Filtra os anúncios com base nos inputs de busca e categoria e os renderiza.
+     * Filtra os anúncios com base nos inputs de busca, categoria e localidade e os renderiza.
      */
     function aplicarFiltros() {
-        const termoBusca = inputBusca.value.toLowerCase();
+        const termoBusca = inputBusca.value.toLowerCase().trim();
         const categoriaSelecionada = selectCategoria.value;
+        const bairroBusca = inputBairro.value.toLowerCase().trim();
+        const cidadeBusca = inputCidade.value.toLowerCase().trim();
+        const estadoSelecionado = selectEstado.value;
 
         const itensFiltrados = todosAnuncios.filter(item => {
+            // Condição 1: Filtro por nome do item
             const correspondeNome = item.titulo.toLowerCase().includes(termoBusca);
+
+            // Condição 2: Filtro por categoria
             const correspondeCategoria = !categoriaSelecionada || item.categoria === categoriaSelecionada;
-            return correspondeNome && correspondeCategoria;
+
+            // Condição 3: Filtro por bairro
+            // Verifica se o campo está vazio OU se o bairro do item (se existir) inclui o termo buscado
+            const correspondeBairro = !bairroBusca || (item.itemBairro && item.itemBairro.toLowerCase().includes(bairroBusca));
+
+            // Condição 4: Filtro por cidade
+            const correspondeCidade = !cidadeBusca || (item.itemCidade && item.itemCidade.toLowerCase().includes(cidadeBusca));
+
+            // Condição 5: Filtro por estado
+            const correspondeEstado = !estadoSelecionado || (item.itemEstado && item.itemEstado === estadoSelecionado);
+            
+            // O item só aparece se TODAS as condições forem verdadeiras
+            return correspondeNome && correspondeCategoria && correspondeBairro && correspondeCidade && correspondeEstado;
         });
 
         renderizarItens(itensFiltrados);
@@ -176,6 +197,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Listeners para os filtros
     inputBusca.addEventListener('input', aplicarFiltros);
     selectCategoria.addEventListener('change', aplicarFiltros);
+    inputBairro.addEventListener('input', aplicarFiltros);
+    inputCidade.addEventListener('input', aplicarFiltros);
+    selectEstado.addEventListener('change', aplicarFiltros);
 
     // Listener para fechar o modal
     btnFecharModal.addEventListener('click', fecharModal);
@@ -187,10 +211,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Listener para os botões "Ver Lances" (usando delegação de eventos)
     listaItensContainer.addEventListener('click', (event) => {
-        if (event.target.classList.contains('btn-ver-lances')) {
-            const itemId = event.target.dataset.itemId;
-            abrirModalLances(itemId);
-        }
+    // Se o botão "Ver Lances" for clicado
+    if (event.target.classList.contains('btn-ver-lances')) {
+        const itemId = event.target.dataset.itemId;
+        abrirModalLances(itemId);
+    } 
+    // Se o botão "Excluir Anúncio" for clicado
+    else if (event.target.classList.contains('btn-excluir')) {
+        const itemId = event.target.dataset.id; // Pegamos o ID do botão
+        excluirAnuncio(itemId); // Chamamos a nossa nova função
+    }
     });
 
     // Listener para os botões "Cancelar" dentro do modal (usando delegação de eventos)

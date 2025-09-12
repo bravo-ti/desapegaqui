@@ -74,11 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ATUALIZE APENAS ESTA FUNÇÃO NO SEU ARQUIVO detalhes-item.js
-
-    /**
-     * Renderiza os detalhes do item, o valor inicial e a melhor oferta atual
-     */
+    
     function renderizarDetalhesItem() {
         const imagemSrc = item.imagemBase64 || 'https://via.placeholder.com/600x400.png?text=Sem+Imagem';
         
@@ -155,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lancesHistoricoContainer.innerHTML = `<ul class="lista-lances">${lancesHTML}</ul>`;
     }
 
-    // --- 4. LÓGICA DO FORMULÁRIO DE LANCE (ATUALIZADA) ---
+    
     formLance.addEventListener('submit', (event) => {
         event.preventDefault();
 
