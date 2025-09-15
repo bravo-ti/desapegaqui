@@ -5,7 +5,8 @@
             DesapegaQui
         </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -21,23 +22,37 @@
                     <a class="nav-link" href="cadastrar-item.html">Anunciar Item</a>
                 </li>
             </ul>
-            
+
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                
+
                 <li class="nav-item" id="register-link">
                     <a class="nav-link" href="cadastro.html">Cadastrar-se</a>
                 </li>
+                <!--
                 <li class="nav-item" id="login-link">
-                    <a class="nav-link btn btn-primary text-white px-3" href="entrar.html">Entrar</a>
+                    <a class="nav-link btn btn-primary text-white px-3" href="#" id="login-btn">Entrar</a>
                 </li>
-
+                -->
+                <li class="nav-item dropdown" id="login-link">
+                    <a class="nav-link dropdown-toggle btn btn-primary text-white px-3" href="#"
+                        id="navbarDropdownLogin" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Entrar (Teste)
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownLogin">
+                        <li><a class="dropdown-item" href="#" id="login-anunciante-btn">Logar como Anunciante</a></li>
+                        <li><a class="dropdown-item" href="#" id="login-comprador-btn">Logar como Comprador</a></li>
+                    </ul>
+                </li>
                 <li class="nav-item dropdown" id="user-greeting" style="display: none;">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         Olá, <strong id="username-display"></strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="perfil.html">Meu Perfil</a></li>
-                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
                         <li><a class="dropdown-item" href="#" id="logout-link">Sair</a></li>
                     </ul>
                 </li>

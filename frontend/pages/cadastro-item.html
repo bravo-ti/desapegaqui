@@ -12,63 +12,64 @@
   <div class="form-box container mt-5">
     <h2 class="mb-4">Cadastrar Item</h2>
 
-    <form id="form-item" enctype="multipart/form-data">
-      <div class="mb-3">
-        <label for="nome" class="form-label">Nome do Item *</label>
-        <input type="text" class="form-control" id="nome" required>
-      </div>
+    <form id="item-form" enctype="multipart/form-data">
 
-      <div class="mb-3">
-        <label for="foto" class="form-label">Foto do Item *</label>
-        <input type="file" class="form-control" id="foto" accept="image/*" required>
-      </div>
+  <div class="mb-3">
+    <label for="nome" class="form-label">Nome do Item *</label>
+    <input type="text" class="form-control" id="nome" name="itemTitulo" required>
+  </div>
 
-      <div class="mb-3">
-        <label for="descricao" class="form-label">Descrição *</label>
-        <textarea class="form-control" id="descricao" rows="4" required></textarea>
-      </div>
+  <div class="mb-3">
+    <label for="foto" class="form-label">Foto do Item *</label>
+    <input type="file" class="form-control" id="item-foto" accept="image/*" required>
+  </div>
 
-      <div class="mb-3">
-        <label for="categoria" class="form-label">Categoria *</label>
-        <select class="form-select" id="categoria" required>
-          <option value="">Selecione uma categoria</option>
-          <option value="eletrodomestico">Eletrodoméstico</option>
-          <option value="vestuario">Vestuário</option>
-          <option value="livros">Livros</option>
-          <option value="brinquedos">Brinquedos</option>
-          <option value="moveis">Móveis</option>
-          <option value="ferramentas">Ferramentas</option>
-          <option value="outros">Outros</option>
-        </select>
-      </div>
+  <div class="mb-3">
+    <label for="descricao" class="form-label">Descrição *</label>
+    <textarea class="form-control" id="descricao" name="itemDetalhes" rows="4" required></textarea>
+  </div>
 
-      <div class="mb-3">
-        <label for="preco" class="form-label">Preço (R$)</label>
-        <input type="number" class="form-control" id="preco" min="0" step="0.01">
-      </div>
+  <div class="mb-3">
+    <label for="categoria" class="form-label">Categoria *</label>
+    <select class="form-select" id="categoria" name="itemCategoria" required>
+      <option value="">Selecione uma categoria</option>
+      <option value="eletrodomestico">Eletrodoméstico</option>
+      <option value="vestuario">Vestuário</option>
+      <option value="livros">Livros</option>
+      <option value="brinquedos">Brinquedos</option>
+      <option value="moveis">Móveis</option>
+      <option value="ferramentas">Ferramentas</option>
+      <option value="outros">Outros</option>
+    </select>
+  </div>
 
-      <div class="mb-3">
-        <label for="quantidade" class="form-label">Quantidade *</label>
-        <input type="number" class="form-control" id="quantidade" min="1" value="1" required>
-      </div>
+  <div class="mb-3">
+    <label for="preco" class="form-label">Preço (R$)</label>
+    <input type="number" class="form-control" id="preco" name="itemValor" min="0" step="0.01">
+  </div>
 
-      <div class="mb-3">
-        <label for="localizacao" class="form-label">Localização *</label>
-        <input type="text" class="form-control" id="localizacao" required>
-      </div>
+  <div class="mb-3">
+    <label for="quantidade" class="form-label">Quantidade *</label>
+    <input type="number" class="form-control" id="quantidade" min="1" value="1" required>
+    </div>
 
-      <div class="mb-3">
-        <label for="tempo" class="form-label">Disponibilidade *</label>
-        <select class="form-select" id="tempo" required>
-          <option value="30">30 dias (padrão)</option>
-          <option value="1">24 horas</option>
-          <option value="7">1 semana</option>
-          <option value="15">15 dias</option>
-        </select>
-      </div>
+  <div class="mb-3">
+    <label for="localizacao" class="form-label">Localização *</label>
+    <input type="text" class="form-control" id="localizacao" required>
+    </div>
 
-      <button type="submit" id="btn-enviar" class="btn btn-success w-100">Cadastrar Item</button>
-    </form>
+  <div class="mb-3">
+    <label for="tempo" class="form-label">Disponibilidade *</label>
+    <select class="form-select" id="tempo" name="itemExpiracao" required>
+      <option value="30">30 dias (padrão)</option>
+      <option value="1">24 horas</option>
+      <option value="7">1 semana</option>
+      <option value="15">15 dias</option>
+    </select>
+  </div>
+
+  <button type="submit" id="btn-enviar" class="btn btn-success w-100">Cadastrar Item</button>
+</form>
 
     <div id="mensagem-sucesso" class="text-center mt-4" style="display: none;">
       <h5 class="text-success">✅ Cadastro com sucesso!</h5>

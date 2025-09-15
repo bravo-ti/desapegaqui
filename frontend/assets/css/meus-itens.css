@@ -85,12 +85,12 @@
     transition: background-color 0.2s;
 }
 
-.btn-editar {
-    background-color: #007bff;
+.btn-excluir {
+    background-color: #dc3545;
     color: white;
     text-decoration: none;
 }
-.btn-editar:hover { background-color: #0056b3; }
+.btn-ex.btn-excluir { background-color: #0056b3; }
 
 .btn-ver-lances {
     background-color: #28a745;
